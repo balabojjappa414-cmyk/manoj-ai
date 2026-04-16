@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>MANOJ AI</h2>
+
+<input id="input" placeholder="Type message..." />
+<button onclick="sendMessage()">Send</button>
+
+<div id="chat"></div>
+
+<script>
+async function sendMessage() {
+  const input = document.getElementById("input");
+  const chat = document.getElementById("chat");
+
+  const userText = input.value;
+
+  chat.innerHTML += "<p><b>You:</b> " + userText + "</p>";
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: userText })
+    });
+
+    const data = await res.json();
+    chat.innerHTML += "<p><b>Bot:</b> " + data.content + "</p>";
+  } catch (error) {
+    chat.innerHTML += "<p style='color:red;'>Error connecting to server</p>";
+  }
+
+  input.value = "";
+}
+</script>
+
+</body>
+</html>
+
+
+
